@@ -8,7 +8,8 @@ public class PinSetter : MonoBehaviour
 {
 
 	public Text standingDisplay;
-	
+
+	private bool ballEnteredBox = false;
 	
 	// Use this for initialization
 	void Start ()
@@ -32,5 +33,30 @@ public class PinSetter : MonoBehaviour
 			}
 		}
 		return standing;
+	}
+
+	void OnTriggerExit (Collider other)
+	{
+
+		if (other.attachedRigidbody.GetComponent<Pin> ()) {
+			Destroy (other.attachedRigidbody.gameObject);
+		}
+
+		//if (other.transform.parent.tag == "Pin") {
+		//	Destroy (other.transform.parent.gameObject);
+		//}
+
+		
+	}
+
+	void OnTriggerEnter (Collider collider)
+	{
+		GameObject thingHit = collider.gameObject;
+		//Ball enters playbox
+		if (thingHit.GetComponent<Ball> ()) {
+			ballEnteredBox = true;
+			standingDisplay.color = Color.red;
+		}
+
 	}
 }
