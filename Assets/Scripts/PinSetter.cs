@@ -8,12 +8,18 @@ public class PinSetter : MonoBehaviour
 {
 
 	public Text standingDisplay;
+	public int lastStandingCount = -1;
 
+	private Ball ball;
 	private bool ballEnteredBox = false;
-	
+	private float lastChangeTime;
+
+
+
 	// Use this for initialization
 	void Start ()
 	{
+		ball = GameObject.FindObjectOfType<Ball> ();
 		
 	}
 
@@ -21,6 +27,39 @@ public class PinSetter : MonoBehaviour
 	void Update ()
 	{
 		standingDisplay.text = CountStanding ().ToString ();
+
+		if (ballEnteredBox) {
+			CheckStanding ();
+		}
+
+	}
+
+
+	void CheckStanding ()
+	{
+		//update the lastStandingCount
+		//call new method called PinsHaveSettled
+		int currentStanding = CountStanding ();
+
+		if (currentStanding != lastStandingCount) {
+			lastChangeTime = Time.time;
+			lastStandingCount = currentStanding;
+			return;
+		}
+
+		float settleTime = 3f; //How long to wait to consider pins settled
+		if ((Time.time - lastChangeTime) > settleTime) { //if last change > 3s ago
+			PinsHaveSettled ();
+		}
+			
+	}
+
+	void PinsHaveSettled ()
+	{
+		ball.Reset ();
+		lastStandingCount = -1;
+		ballEnteredBox = false;
+		standingDisplay.color = Color.green;
 	}
 
 	int CountStanding ()
@@ -34,6 +73,7 @@ public class PinSetter : MonoBehaviour
 		}
 		return standing;
 	}
+
 
 	void OnTriggerExit (Collider other)
 	{
