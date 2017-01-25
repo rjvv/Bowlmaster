@@ -19,3 +19,5 @@
 /Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/Assembly-CSharp.dll
 /Users/Ryan/Desktop/Unity/Bowlmaster/obj/Debug/Assembly-CSharp.dll
 /Users/Ryan/Desktop/Unity/Bowlmaster/obj/Debug/Assembly-CSharp.dll.mdb
+/Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/UnityEngine.Purchasing.dll
+/Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/UnityEngine.Advertisements.dll

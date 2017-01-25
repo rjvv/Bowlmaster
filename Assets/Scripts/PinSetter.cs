@@ -10,16 +10,20 @@ public class PinSetter : MonoBehaviour
 	public Text standingDisplay;
 	public int lastStandingCount = -1;
 
+	public GameObject pinSet;
+
 	private Ball ball;
 	private bool ballEnteredBox = false;
 	private float lastChangeTime;
-
-
+	private int lastSettledCount = 10;
+	private ActionMaster actionMaster = new ActionMaster ();
+	private Animator animator;
 
 	// Use this for initialization
 	void Start ()
 	{
 		ball = GameObject.FindObjectOfType<Ball> ();
+		animator = GetComponent<Animator> ();
 		
 	}
 
@@ -56,6 +60,29 @@ public class PinSetter : MonoBehaviour
 
 	void PinsHaveSettled ()
 	{
+
+		int standing = CountStanding ();
+		
+		int pinFall = lastSettledCount - standing;
+		lastSettledCount = standing;
+
+		ActionMaster.Action action = actionMaster.Bowl (pinFall);
+		Debug.Log ("Pinfall:" + pinFall + "___Action:" + action);
+
+
+		if (action == ActionMaster.Action.Tidy) {
+			animator.SetTrigger ("tidyTrigger");
+		} else if (action == ActionMaster.Action.EndTurn) {
+			animator.SetTrigger ("resetTrigger");
+			lastSettledCount = 10;
+		} else if (action == ActionMaster.Action.Reset) {
+			animator.SetTrigger ("resetTrigger");
+			lastSettledCount = 10;
+		} else if (action == ActionMaster.Action.EndGame) {
+			throw new UnityException ("Dont KNOW HOW TO HANDLE END GAME YET!");
+		}
+
+
 		ball.Reset ();
 		lastStandingCount = -1;
 		ballEnteredBox = false;
@@ -74,20 +101,30 @@ public class PinSetter : MonoBehaviour
 		return standing;
 	}
 
+	public void RaisePins ()
+	{
+		foreach (Pin pin in GameObject.FindObjectsOfType<Pin>()) {
+			pin.RaiseIfStanding ();
+		}
+	}
 
-	void OnTriggerExit (Collider other)
+	public void LowerPins ()
 	{
 
-		if (other.attachedRigidbody.GetComponent<Pin> ()) {
-			Destroy (other.attachedRigidbody.gameObject);
+		foreach (Pin pin in GameObject.FindObjectsOfType<Pin>()) {
+			pin.Lower ();
 		}
 
-		//if (other.transform.parent.tag == "Pin") {
-		//	Destroy (other.transform.parent.gameObject);
-		//}
-
-		
 	}
+
+	public void RenewPins ()
+	{
+
+		GameObject newPins = Instantiate (pinSet);
+		newPins.transform.position += new Vector3 (0, 0, 0);
+	}
+
+
 
 	void OnTriggerEnter (Collider collider)
 	{
