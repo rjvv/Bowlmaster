@@ -8,16 +8,21 @@ public class PinSetter : MonoBehaviour
 {
 
 	public Text standingDisplay;
-	public int lastStandingCount = -1;
-
 	public GameObject pinSet;
 
-	private Ball ball;
-	private bool ballEnteredBox = false;
+	private ActionMaster actionMaster = new ActionMaster ();
+	//create 1 instance of ActionMaster
+
+
+	private bool ballOutOfPlay = false;
+
+	private int lastStandingCount = -1;
 	private float lastChangeTime;
 	private int lastSettledCount = 10;
-	private ActionMaster actionMaster = new ActionMaster ();
+
+
 	private Animator animator;
+	private Ball ball;
 
 	// Use this for initialization
 	void Start ()
@@ -32,10 +37,16 @@ public class PinSetter : MonoBehaviour
 	{
 		standingDisplay.text = CountStanding ().ToString ();
 
-		if (ballEnteredBox) {
+		if (ballOutOfPlay) {
 			CheckStanding ();
+			standingDisplay.color = Color.red;
 		}
 
+	}
+
+	public void SetBallOutOfPlay ()
+	{
+		ballOutOfPlay = true;
 	}
 
 
@@ -66,6 +77,7 @@ public class PinSetter : MonoBehaviour
 		int pinFall = lastSettledCount - standing;
 		lastSettledCount = standing;
 
+
 		ActionMaster.Action action = actionMaster.Bowl (pinFall);
 		Debug.Log ("Pinfall:" + pinFall + "___Action:" + action);
 
@@ -85,7 +97,7 @@ public class PinSetter : MonoBehaviour
 
 		ball.Reset ();
 		lastStandingCount = -1;
-		ballEnteredBox = false;
+		ballOutOfPlay = false;
 		standingDisplay.color = Color.green;
 	}
 
@@ -105,6 +117,8 @@ public class PinSetter : MonoBehaviour
 	{
 		foreach (Pin pin in GameObject.FindObjectsOfType<Pin>()) {
 			pin.RaiseIfStanding ();
+			//pin.transform.rotation = Quaternion.Euler (-90f, 0, 0);
+			//set pin rotation to vertical after pins have settled... not really working right now.
 		}
 	}
 
@@ -126,14 +140,5 @@ public class PinSetter : MonoBehaviour
 
 
 
-	void OnTriggerEnter (Collider collider)
-	{
-		GameObject thingHit = collider.gameObject;
-		//Ball enters playbox
-		if (thingHit.GetComponent<Ball> ()) {
-			ballEnteredBox = true;
-			standingDisplay.color = Color.red;
-		}
 
-	}
 }
