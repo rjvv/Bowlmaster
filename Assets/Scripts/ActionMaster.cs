@@ -27,8 +27,8 @@ public class ActionMaster
 		}
 		return currentAction;
 	}
-	//TODO: make Bowl private
-	public Action Bowl (int pins)
+
+	private Action Bowl (int pins)
 	{
 		if (pins < 0 || pins > 10) {
 			throw new UnityException ("Not sure what action to return!");
