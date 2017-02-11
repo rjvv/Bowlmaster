@@ -21,4 +21,9 @@ public class ScoreDisplay : MonoBehaviour
 	{
 		
 	}
+
+	public void FillRollCard (List<int>rolls)
+	{
+		rolls [-1] = 1;
+	}
 }
