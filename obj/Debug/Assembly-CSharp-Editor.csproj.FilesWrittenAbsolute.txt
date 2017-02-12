@@ -43,3 +43,5 @@
 /Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/Unity.CecilTools.dll
 /Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/UnityEngine.Purchasing.dll
+/Users/Ryan/Desktop/Unity/Bowlmaster/Temp/bin/Debug/UnityEngine.Advertisements.dll
